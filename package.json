@@ -5,25 +5,26 @@
   "type": "module",
   "scripts": {
     "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
     "test": "mocha",
     "test:watch": "mocha --watch",
     "testInicial": "echo \"Running initial tests...\" && mocha"
   },
   "dependencies": {
+    "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
+    "express-session": "^1.18.1",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
     "pug": "^3.0.3"
   },
   "devDependencies": {
     "chai": "^5.1.2",
-    "mocha": "^11.0.1"
-  },
-  "description": "Sistema Administrativo y Contable",
-  "main": "index.js",
-  "repository": "https://github.com/daab/solparts.git",
-  "author": "Domingo <domingo.aab@gmail.com>",
-  "license": "MIT"
+    "mocha": "^11.0.1",
+    "nodemon": "^2.0.15"
+  }
 }
