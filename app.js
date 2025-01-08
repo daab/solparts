@@ -8,7 +8,7 @@ import session from 'express-session';
 import passport from 'passport';
 import flash from 'connect-flash';
 import SequelizeStore from 'connect-session-sequelize';
-import sequelize from './config/database.js'; // Importar la configuración de Sequelize
+import { localSequelize, serverSequelize } from './config/database.js'; // Importar las configuraciones de Sequelize
 import './passport-config.js'; // Importar la configuración de passport
 
 import indexRouter from './modules/system/routes/index-routes.js';
@@ -35,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Configurar express-session con connect-session-sequelize
 const SequelizeSessionStore = SequelizeStore(session.Store);
 const sessionStore = new SequelizeSessionStore({
-  db: sequelize,
+  db: process.env.NODE_ENV === 'production' ? serverSequelize : localSequelize, // Usa la conexión correcta según el entorno
 });
 
 app.use(session({
@@ -77,8 +77,15 @@ app.use(function(err, req, res, next) {
 });
 
 // Sincronizar la base de datos
-sequelize.sync({ force: false }).then(() => {
-  console.log('Database & tables created!');
-});
+const sequelize = process.env.NODE_ENV === 'production' ? serverSequelize : localSequelize;
+
+sequelize.sync({ force: false })
+    .then(() => {
+        console.log(`${process.env.NODE_ENV === 'production' ? 'Server' : 'Local'} database & tables created!`);
+    })
+    .catch(err => {
+        console.error('Error al sincronizar la base de datos:', err);
+    });
+
 
 export default app;

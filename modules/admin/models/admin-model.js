@@ -1,8 +1,7 @@
-// filepath: C:\www\solparts\modules\admin\models\Admin.js
 import { DataTypes } from 'sequelize';
-import sequelize from '../../../config/database.js';
+import { localSequelize } from '../../../config/database.js'; // Importar la conexión correcta
 
-const Admin = sequelize.define('Admin', {
+const Admin = localSequelize.define('Admin', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,

@@ -1,8 +1,7 @@
-// filepath: C:\www\solparts\modules\system\models\User.js
 import { DataTypes } from 'sequelize';
-import sequelize from '../../../config/database.js';
+import { localSequelize } from '../../../config/database.js'; // Importar la conexión correcta
 
-const User = sequelize.define('User', {
+const User = localSequelize.define('User', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
