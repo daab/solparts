@@ -1,0 +1,10 @@
+/user-view.pug
+extends layout-view
+
+block content
+  h1 Users
+  ul#user-list
+    each user in users
+      li
+        a(href=`/users/${user.id}`)= user.username
+  button#load-more(hx-get="/system/users/more" hx-target="#user-list" hx-swap="beforeend") Load More

@@ -1,18 +1,21 @@
-// filepath: /c:/www/solparts/passport-config.js
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
+import User from './modules/system/models/user-model.js'; // Importar el modelo de usuario
 
 // Configurar la estrategia local
 passport.use(new LocalStrategy(
-  function(username, password, done) {
-    // Aquí deberías buscar el usuario en tu base de datos y verificar la contraseña
-    // Por simplicidad, vamos a usar un usuario ficticio
-    const user = { id: 1, username: 'test', password: 'password' };
-
-    if (username === user.username && password === user.password) {
+  async function(username, password, done) {
+    try {
+      const user = await User.findOne({ where: { username } });
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (user.password !== password) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
       return done(null, user);
-    } else {
-      return done(null, false, { message: 'Incorrect username or password.' });
+    } catch (err) {
+      return done(err);
     }
   }
 ));
@@ -23,9 +26,11 @@ passport.serializeUser(function(user, done) {
 });
 
 // Deserializar el usuario
-passport.deserializeUser(function(id, done) {
-  // Aquí deberías buscar el usuario en tu base de datos por su ID
-  // Por simplicidad, vamos a usar un usuario ficticio
-  const user = { id: 1, username: 'test' };
-  done(null, user);
+passport.deserializeUser(async function(id, done) {
+  try {
+    const user = await User.findByPk(id);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
 });

@@ -1,0 +1,8 @@
+extends layout-view
+
+block content
+  h1= user.username
+  p ID: #{user.id}
+  p Username: #{user.username}
+  p Password: #{user.password}
+  a(href='/users') Back to Users
